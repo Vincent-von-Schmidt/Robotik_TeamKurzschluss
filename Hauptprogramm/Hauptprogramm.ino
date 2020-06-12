@@ -19,61 +19,62 @@ void setup() {
   LeseMinMax();
   zeigeMinMax ();
   int taste = leseTaster();
-  while (taste == 0)
+  while (taste == 0) {
     taste = leseTaster();
-  if (taste == Taster_L) {
-    kalibrieren();
-    zeigeMinMax ();
-    SpeichereMinMax();
-    delay(300);
+    if (taste == Taster_L) {
+      kalibrieren();
+      zeigeMinMax ();
+      SpeichereMinMax();
+    }
   }
-}
-
-void loop() {
-  messeLicht();
-  LichtUmrechnen();
-  if (leseTaster()) {
-    umfahreDose(RECHTS);
-  }
-  if (testeWeiss) {          //Lücke
-    long t1;
-    OnFwd(OUT_AB, V);
-    delay(100);
+  
+  delay(300);
+  
+  void loop() {
     messeLicht();
     LichtUmrechnen();
-    t1 = millis();
-    while (((millis() - t1) < 2500) && (testeWeiss)) {
+    if (leseTaster()) {
+      umfahreDose(RECHTS);
+    }
+    if (testeWeiss) {          //Lücke
+      long t1;
+      OnFwd(OUT_AB, V);
+      delay(100);
       messeLicht();
       LichtUmrechnen();
-      if (!testeWeiss) {
-        return;
-      }// else steht immer noch auf weiss
-    }
-    OnRev(OUT_AB, V);
-    t1= millis();
-    while (((millis() - t1) < 2700) && (testeWeiss)) {
-      messeLicht();
-      LichtUmrechnen();
-    }
-    delay(100);
-    Off(OUT_AB);
-    return;
-  }
-
-  else {
-    // Kreuzung
-    if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
-      OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
-      OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
-      delay(130);
+      t1 = millis();
+      while (((millis() - t1) < 2500) && (testeWeiss)) {
+        messeLicht();
+        LichtUmrechnen();
+        if (!testeWeiss) {
+          return;
+        }// else steht immer noch auf weiss
+      }
+      OnRev(OUT_AB, V);
+      t1 = millis();
+      while (((millis() - t1) < 2700) && (testeWeiss)) {
+        messeLicht();
+        LichtUmrechnen();
+      }
+      delay(100);
+      Off(OUT_AB);
+      return;
     }
 
     else {
-      // Linienfolger
-      int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
-      OnFwd(OUT_A, V + diff);
-      OnFwd(OUT_B, V - diff);
+      // Kreuzung
+      if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
+        OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
+        OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
+        delay(130);
+      }
 
+      else {
+        // Linienfolger
+        int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
+        OnFwd(OUT_A, V + diff);
+        OnFwd(OUT_B, V - diff);
+
+      }
     }
   }
-}
