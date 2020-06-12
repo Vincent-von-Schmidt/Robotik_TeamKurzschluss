@@ -29,7 +29,7 @@ void setup() {
   }
   
   delay(300);
-  
+}
   void loop() {
     messeLicht();
     LichtUmrechnen();
