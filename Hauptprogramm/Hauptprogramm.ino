@@ -19,16 +19,16 @@ void setup() {
   LeseMinMax();
   zeigeMinMax ();
   int taste = leseTaster();
-  while (taste == 0) {
+  while (taste == 0) 
     taste = leseTaster();
     if (taste == Taster_L) {
       kalibrieren();
       zeigeMinMax ();
       SpeichereMinMax();
     }
-  }
   
-  delay(300);
+  
+  delay(1500);
 }
   void loop() {
     messeLicht();
