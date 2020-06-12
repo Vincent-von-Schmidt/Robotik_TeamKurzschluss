@@ -68,7 +68,7 @@ void Entfernung (){
 void loop() {
 OnFwd(OUT_AB,V);
 
- Entfernung ();
+// Entfernung ();
 
  if (entfernung < 11) {
 Off(OUT_AB);
@@ -99,7 +99,7 @@ delay (2000);
     while (1);
 
     return;*/
-  /* messeLicht();
+   messeLicht();
     LichtUmrechnen();
     if (leseTaster()) {
      umfahreDose(RECHTS);
@@ -209,8 +209,8 @@ delay (2000);
     return;*/
 
 
+    }
 
-/*
 else {
   // Kreuzung
   if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
@@ -227,4 +227,4 @@ else {
 
   }
 }
-*/}
+}
