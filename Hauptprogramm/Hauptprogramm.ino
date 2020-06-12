@@ -25,6 +25,7 @@ void setup() {
     kalibrieren();
     zeigeMinMax ();
     SpeichereMinMax();
+    delay(300);
   }
 }
 
@@ -76,5 +77,3 @@ void loop() {
     }
   }
 }
-
-// hallo und test für git
