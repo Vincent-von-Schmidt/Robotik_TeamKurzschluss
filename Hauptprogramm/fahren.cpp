@@ -8,44 +8,6 @@
 #define SCHWARZ 60
 byte PEData;
 
-bool fahreZeitBisSchwarz(long zeit, int geschwindigkeit) {
-  boolean istSchwarz = 0;
-  OnFwd(OUT_AB, geschwindigkeit);
-  messeLicht();
-  LichtUmrechnen();
-  long t1 = millis();
-  while ((t1 == zeit) || istSchwarz == 1) {
-    messeLicht();
-    LichtUmrechnen();
-    t1 = millis();
-    if (testeSchwarz) {
-      istSchwarz = 1; 
-    }
-  }
-  Off(OUT_AB);
-  return istSchwarz;
-}
-
-bool dreheZeitBisSchwarz(long zeit, int geschwindigkeit, byte richtung) {
-  boolean istSchwarz = 0;
-  drehe (geschwindigkeit, zeit, richtung);
-  messeLicht();
-  LichtUmrechnen();
-  long t1 = millis();
-  while ((t1 == zeit) || istSchwarz == 1) {
-    messeLicht();
-    LichtUmrechnen();
-    t1 = millis();
-    if (testeSchwarz) {
-      istSchwarz = 1; 
-    }
-  }
-  Off(OUT_AB);
-  return istSchwarz;
-}
-
-
-
 void schreibePEData(byte data) {
   digitalWrite(LICHT_CS, LOW);
   SPI.transfer(data);
@@ -61,8 +23,6 @@ byte leseTaster() {
   return Taster;
 }
 
-
-
 void setLED(int led) {
   PEData &= 0xF0;
   PEData |= (led & 0x0F);
@@ -74,7 +34,6 @@ void setLED(int led) {
 void OnFwd(byte mot, int v)
 {
   // prüfe auf erlaubten Wertebereich
-
   byte richtung = 0;
   if (v >= 0) { // vorwärts fahren
     if (mot & OUT_A) {
@@ -115,13 +74,10 @@ void OnFwd(byte mot, int v)
       schreibePEData(PEData);
     }
   }
-
 }
-
 void OnRev(byte mot, int v) {
   OnFwd(mot, -v);
 }
-
 void Off(byte mot) {
   byte richtung = 0;
   if (mot & OUT_A) {
@@ -135,15 +91,7 @@ void Off(byte mot) {
     schreibePEData(PEData);
   }
 }
-
-/*
-    fährt max. t ms mit gegebenem V,
-    bricht ab, wenn schwarz gefunden wird
-   return 0, wenn keien schwarze Linie gefunden wurde
-          1 wenn swarze Linie gefunden wurde
-*/
 #define SCHWARZ 60
-
 int drehe (int V, int t, int Richtung) {
   long t1 = millis();
   long t2 = t1;
@@ -170,23 +118,10 @@ int drehe (int V, int t, int Richtung) {
   return 0;
 }
 
-/*
-    fährt max. t ms mit gegebenem V,
-    bricht ab, wenn schwarz gefunden wird
-   return 0, wenn keien schwarze Linie gefunden wurde
-          1 wenn swarze Linie gefunden wurde
-*/
-
-
-
 int fahreVor (int V, int t, int Sensor) {
-
   long t1 = millis();
   long t2 = t1;
-
   OnFwd (OUT_AB, V);
-
-
   while ((t2 - t1) < t) {
     delay (1);
     messeLicht();
@@ -201,8 +136,6 @@ int fahreVor (int V, int t, int Sensor) {
   Off (OUT_AB); // ?
   return 0;
 }
-
-
 void umfahreDose (int Richtung) {
   int Mot1 = OUT_A;
   int Mot2 = OUT_B;
@@ -219,7 +152,7 @@ void umfahreDose (int Richtung) {
   Off(OUT_AB);
   OnFwd(OUT_AB, 80);
   delay(1500);
-
+  
   boolean istSchwarz = 1; // =1 wenn Linie gefunden
   do {
     Serial.println(istSchwarz);
@@ -230,7 +163,6 @@ void umfahreDose (int Richtung) {
     }
   }
   while (istSchwarz == 0);
-
   OnFwd(Mot1, 120); //drehen
   OnRev(Mot2, 50);
   delay(500);
@@ -243,9 +175,5 @@ void umfahreDose (int Richtung) {
   else {
     drehe (100, 2000, RECHTS);
   }
-
-
-
-  
   Off(OUT_AB);
 }

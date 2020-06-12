@@ -10,55 +10,32 @@
 #define testeWeiss ((WerteW[RECHTS] >= WEISS) && (WerteW[LINKS] >= WEISS))
 #define testeSchwarz ((WerteW[RECHTS] <= SCHWARZ) && (WerteW[LINKS] <= SCHWARZ))
 #define testeLinie  ((WerteW[RECHTS] <= 50) || (WerteW[LINKS] <= 50))
-
 #define WEISS_LUECKE 90
 #define testeWeiss_Lueke ((WerteW[RECHTS] >= WEISS_LUECKE) && (WerteW[LINKS] >= WEISS_LUECKE))
 
-void LichtTest() {
-  messeLicht();
-  LichtUmrechnen();
-  zeigeLichtSeriell();
-  delay(200);
-  return;
-}
 void setup() {
   Serial.begin(115200);
   hardwareInit();
-
   LeseMinMax();
   zeigeMinMax ();
-
   int taste = leseTaster();
   while (taste == 0)
     taste = leseTaster();
-
   if (taste == Taster_L) {
-    Serial.println("Kalibrierung...");
     kalibrieren();
     zeigeMinMax ();
     SpeichereMinMax();
-    Serial.println("Kalibriert");
-
   }
-  delay(1500);
-
 }
 
 void loop() {
-
   messeLicht();
   LichtUmrechnen();
   if (leseTaster()) {
     umfahreDose(RECHTS);
   }
-
-
-
-
-
   if (testeWeiss) {          //Lücke
     long t1;
-    Serial.println("Weiss");
     OnFwd(OUT_AB, V);
     delay(100);
     messeLicht();
@@ -68,17 +45,10 @@ void loop() {
       messeLicht();
       LichtUmrechnen();
       if (!testeWeiss) {
-        Serial.println("not Weiss");
         return;
-      }
-      // else steht immer noch auf weiss
+      }// else steht immer noch auf weiss
     }
-    Serial.println("kein Linie");
-
-    
-    // Linie verloren, rückwärts
     OnRev(OUT_AB, V);
-
     t1= millis();
     while (((millis() - t1) < 2700) && (testeWeiss)) {
       messeLicht();
@@ -87,9 +57,6 @@ void loop() {
     delay(100);
     Off(OUT_AB);
     return;
-    //delay(1000);
-
-
   }
 
   else {
