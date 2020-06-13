@@ -25,16 +25,15 @@ void setup() {
       kalibrieren();
       zeigeMinMax ();
       SpeichereMinMax();
-    }
-  
-  
+    }  
   delay(1500);
 }
+
   void loop() {
     messeLicht();
     LichtUmrechnen();
     if (leseTaster()) {
-      umfahreDose(RECHTS);
+      umfahreDose(LINKS);
     }
     if (testeWeiss) {          //Lücke
       long t1;
@@ -64,8 +63,8 @@ void setup() {
     else {
       // Kreuzung
       if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
-        OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
-        OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
+        OnFwd(OUT_A, +180);                               //+180=Links; -100=Rechts
+        OnFwd(OUT_B, -100);                               //-100=Links; +180=Rechts
         delay(130);
       }
 

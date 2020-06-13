@@ -5,7 +5,7 @@
 #include <SPI.h>
 #define testeSchwarz (WerteW[RECHTS] && WerteW[LINKS] >= SCHWARZ)
 #define WEISS 100
-#define SCHWARZ 60
+#define SCHWARZ 20
 byte PEData;
 
 void schreibePEData(byte data) {
@@ -91,7 +91,7 @@ void Off(byte mot) {
     schreibePEData(PEData);
   }
 }
-#define SCHWARZ 60
+#define SCHWARZ 20
 int drehe (int V, int t, int Richtung) {
   long t1 = millis();
   long t2 = t1;
@@ -148,7 +148,7 @@ void umfahreDose (int Richtung) {
   Off(OUT_AB);
   OnFwd(Mot1, 80); //drehen
   OnRev(Mot2, 80);
-  delay(1000);
+  delay(1500);
   Off(OUT_AB);
   OnFwd(OUT_AB, 80);
   delay(1500);
