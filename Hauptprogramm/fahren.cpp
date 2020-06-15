@@ -148,7 +148,7 @@ void umfahreDose (int Richtung) {
   Off(OUT_AB);
   OnFwd(Mot1, 80); //drehen
   OnRev(Mot2, 80);
-  delay(1500);
+  delay(1000);
   Off(OUT_AB);
   OnFwd(OUT_AB, 80);
   delay(1500);
