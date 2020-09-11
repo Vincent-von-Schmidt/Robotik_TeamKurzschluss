@@ -6,9 +6,12 @@
 
 extern int WerteW2[ANZ_LS];
 extern int WerteW[ANZ_LS];
+extern int WerteG[ANZ_LS];
 
 extern void zeigeLichtSeriell();
 extern void messeLicht();
+
+extern int gruenepunkte(); 
 
 void kalibrieren();
 void zeigeMinMax ();

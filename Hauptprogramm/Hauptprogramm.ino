@@ -52,8 +52,8 @@ void setup() {
   pinMode(echo, INPUT);
 }
 
-void Entfernung (){
-   digitalWrite(trigger, LOW);
+void Entfernung () {
+  digitalWrite(trigger, LOW);
   delay(5);
   digitalWrite(trigger, HIGH);
   delay(10);
@@ -62,18 +62,17 @@ void Entfernung (){
   entfernung = (dauer / 2) / 29.1;
   Serial.print(entfernung);
   Serial.println(" cm");
-  
+
 }
 
 void loop() {
-OnFwd(OUT_AB,V);
+  /*OnFwd(OUT_AB, V);
+    // Entfernung ();
 
-// Entfernung ();
-
- if (entfernung < 11) {
-Off(OUT_AB);
-delay (2000);
-}
+  if (entfernung < 11) {
+    Off(OUT_AB);
+      delay (2000);
+    }*/
   /*
     //fahreZeitBisSchwarz(3000, 255);
     // delay(2000);
@@ -99,63 +98,65 @@ delay (2000);
     while (1);
 
     return;*/
-   messeLicht();
-    LichtUmrechnen();
-    if (leseTaster()) {
-     umfahreDose(RECHTS);
-    }
+  messeLicht();
+  LichtUmrechnen();
+  /*if (leseTaster()) {
+  umfahreDose(RECHTS);
+
+  }*/
 
 
-    //zeigeLichtSeriell();
+  zeigeLichtSeriell();
+  delay(30);
 
 
-    if (testeWeiss) {          //Lücke
-     long t1;
-     Serial.println("Weiss");
-     OnFwd(OUT_AB, V);
-     delay(100);
-     messeLicht();
-     LichtUmrechnen();
-     t1 = millis();
-     while (((millis() - t1) < 2500) && (testeWeiss)) {
-       messeLicht();
-       LichtUmrechnen();
-       if (!testeWeiss) {
-         Serial.println("not Weiss");
-         return;
-       }
-       // else steht immer noch auf weiss
-     }
-     Serial.println("kein Linie");
-     //Off(OUT_AB);
-     //delay(1000);
+  /*   if (testeWeiss) {          //Lücke
+      long t1;
+      Serial.println("Weiss");
+      OnFwd(OUT_AB, V);
+      delay(100);
+      messeLicht();
+      LichtUmrechnen();
+      t1 = millis();
+      while (((millis() - t1) < 2500) && (testeWeiss)) {
+        messeLicht();
+        LichtUmrechnen();
+        if (!testeWeiss) {
+          Serial.println("not Weiss");
+          return;
+        }
+        // else steht immer noch auf weiss
+      }
+      Serial.println("kein Linie");
+      //Off(OUT_AB);
+      //delay(1000);
 
-     // Linie verloren, rückwärts
-     OnRev(OUT_AB, V);
+      // Linie verloren, rückwärts
+      OnRev(OUT_AB, V);
 
-     t1 = millis();
-     while (((millis() - t1) < 2700) && (testeWeiss)) {
-       messeLicht();
-       LichtUmrechnen();
-     }
-     delay(100);
-     Off(OUT_AB);
-     return;
-     //delay(1000);
-     /*
-         messeLicht();
-         LichtUmrechnen();
-         if (testeWeiss_Lueke) {
-           // Off(OUT_AB);
-           Serial.println("Luecke");
-           // delay(1000);
-           return;
-         } else {
-           Serial.println("keine Luecke");
-           return;
-         }
-         //delay(1000);
-  */
+      t1 = millis();
+      while (((millis() - t1) < 2700) && (testeWeiss)) {
+        messeLicht();
+        LichtUmrechnen();
+      }
+      delay(100);
+      Off(OUT_AB);
+      return;
+      //delay(1000);
+      /*
+          messeLicht();
+          LichtUmrechnen();
+          if (testeWeiss_Lueke) {
+            // Off(OUT_AB);
+            Serial.println("Luecke");
+            // delay(1000);
+            return;
+          } else {
+            Serial.println("keine Luecke");
+            return;
+          }*/
+  //delay(1000);
+
 
   /* //Luecke oder Linie verloren
      long zeit = 2000;
@@ -209,22 +210,22 @@ delay (2000);
     return;*/
 
 
+  //}
+
+/*  else {
+    // Kreuzung
+    if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
+      // OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
+      //  OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
+      // delay(130);
     }
 
-else {
-  // Kreuzung
-  if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
-    OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
-    OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
-    delay(130);
-  }
+    else {
+      // Linienfolger
+      //   int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
+      // OnFwd(OUT_A, V + diff);
+      // OnFwd(OUT_B, V - diff);
 
-  else {
-    // Linienfolger
-    int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
-    OnFwd(OUT_A, V + diff);
-    OnFwd(OUT_B, V - diff);
-
-  }
-}
+    }
+  }*/
 }
