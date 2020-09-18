@@ -69,7 +69,7 @@ void loop() {
   /*OnFwd(OUT_AB, V);
     // Entfernung ();
 
-  if (entfernung < 11) {
+    if (entfernung < 11) {
     Off(OUT_AB);
       delay (2000);
     }*/
@@ -100,14 +100,14 @@ void loop() {
     return;*/
   messeLicht();
   LichtUmrechnen();
-  /*if (leseTaster()) {
-  umfahreDose(RECHTS);
+  if (leseTaster()) {
+    umfahreDose(RECHTS);
 
-  }*/
+  }
 
 
-  zeigeLichtSeriell();
-  delay(30);
+  //zeigeLichtSeriell();
+  //delay(30);
 
 
   /*   if (testeWeiss) {          //Lücke
@@ -212,20 +212,39 @@ void loop() {
 
   //}
 
-/*  else {
-    // Kreuzung
-    if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
-      // OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
-      //  OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
-      // delay(130);
-    }
+ /* if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
+    OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
+    OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
+    delay(130);
+  }*/
 
+
+  else {
+    // Kreuzung
+    if (gruenepunkte() == 1) { //LINKS
+      Serial.println("Links Grün");
+      OnFwd(OUT_A, +180);
+      OnFwd(OUT_B, -100);
+      delay(130);
+    }
+    if (gruenepunkte() == 2) { //RECHTS
+      Serial.println("Rechts Grün");
+      OnFwd(OUT_A, -100);
+      OnFwd(OUT_B, +180);
+      delay(130);
+    }
+    if (gruenepunkte() == 3) { //Geradeaus
+      Serial.println("Beide Grün");
+      OnFwd(OUT_A, +40);
+      OnFwd(OUT_B, +40);
+      delay(130);
+    }
     else {
       // Linienfolger
-      //   int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
-      // OnFwd(OUT_A, V + diff);
-      // OnFwd(OUT_B, V - diff);
+      int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
+      OnFwd(OUT_A, V + diff);
+      OnFwd(OUT_B, V - diff);
 
     }
-  }*/
+  }
 }
