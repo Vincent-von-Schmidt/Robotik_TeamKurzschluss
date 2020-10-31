@@ -50,12 +50,6 @@ void messeLicht() {
   setLED(0);
 }
 
-
-#define GRUEN_LINKS  1
-#define GRUEN_RECHTS 2
-#define GRUEN_BEIDE  3
-
-
 int gruenepunkte() {
   int diff = WerteG[0] - WerteR[0];
   if (diff >= GRUEN_SCHWELLE) {
@@ -79,7 +73,6 @@ int gruenepunkte() {
     RGruen = 0;
     return GRUEN_RECHTS;
   }
-
   return 0;
 }
 

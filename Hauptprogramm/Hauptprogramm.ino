@@ -3,6 +3,7 @@
 #include "messen.h"
 #include "fahren.h"
 #include <EEPROM.h>
+
 #define V 80
 #define WEISS 90
 #define SCHWARZ 25
@@ -19,6 +20,7 @@ int echo = 8;
 int dauer = 0;
 long entfernung = 0;
 
+int StatusGruen = 0;
 
 void LichtTest() {
   messeLicht();
@@ -110,53 +112,53 @@ void loop() {
   //delay(30);
 
 
-  /*   if (testeWeiss) {          //Lücke
-      long t1;
-      Serial.println("Weiss");
-      OnFwd(OUT_AB, V);
-      delay(100);
+  if (testeWeiss) {          //Lücke
+    long t1;
+    Serial.println("Weiss");
+    OnFwd(OUT_AB, V);
+    delay(100);
+    messeLicht();
+    LichtUmrechnen();
+    t1 = millis();
+    while (((millis() - t1) < 2500) && (testeWeiss)) {
       messeLicht();
       LichtUmrechnen();
-      t1 = millis();
-      while (((millis() - t1) < 2500) && (testeWeiss)) {
-        messeLicht();
-        LichtUmrechnen();
-        if (!testeWeiss) {
-          Serial.println("not Weiss");
-          return;
-        }
-        // else steht immer noch auf weiss
+      if (!testeWeiss) {
+        Serial.println("not Weiss");
+        return;
       }
-      Serial.println("kein Linie");
-      //Off(OUT_AB);
-      //delay(1000);
+      // else steht immer noch auf weiss
+    }
+    Serial.println("kein Linie");
+    //Off(OUT_AB);
+    //delay(1000);
 
-      // Linie verloren, rückwärts
-      OnRev(OUT_AB, V);
+    // Linie verloren, rückwärts
+    OnRev(OUT_AB, V);
 
-      t1 = millis();
-      while (((millis() - t1) < 2700) && (testeWeiss)) {
-        messeLicht();
-        LichtUmrechnen();
-      }
-      delay(100);
-      Off(OUT_AB);
+    t1 = millis();
+    while (((millis() - t1) < 2700) && (testeWeiss)) {
+      messeLicht();
+      LichtUmrechnen();
+    }
+    delay(100);
+    Off(OUT_AB);
+    return;
+    //delay(1000);
+
+    messeLicht();
+    LichtUmrechnen();
+    if (testeWeiss_Lueke) {
+      // Off(OUT_AB);
+      Serial.println("Luecke");
+      // delay(1000);
       return;
-      //delay(1000);
-      /*
-          messeLicht();
-          LichtUmrechnen();
-          if (testeWeiss_Lueke) {
-            // Off(OUT_AB);
-            Serial.println("Luecke");
-            // delay(1000);
-            return;
-          } else {
-            Serial.println("keine Luecke");
-            return;
-          }*/
-  //delay(1000);
-
+    } else {
+      Serial.println("keine Luecke");
+      return;
+    }
+    //delay(1000);
+  }
 
   /* //Luecke oder Linie verloren
      long zeit = 2000;
@@ -212,39 +214,63 @@ void loop() {
 
   //}
 
- /* if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
-    OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
-    OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
-    delay(130);
-  }*/
+  /* if (WerteW2[RECHTS] < 30 && WerteW2[LINKS] < 30) {
+     OnFwd(OUT_A, -100);                               //+180=Links; -100=Rechts
+     OnFwd(OUT_B, +180);                               //-100=Links; +180=Rechts
+     delay(130);
+    }*/
+
+
 
 
   else {
     // Kreuzung
-    if (gruenepunkte() == 1) { //LINKS
+    int GruenePunkteSpeicher = gruenepunkte(); // Fuktion muss fortlaufend den Status zurückgeben
+
+    if (StatusGruen != 0) {
+      if (GruenePunkteSpeicher == 0) {
+        // schwarz oder weiss auf der richtigen Seite pruefen -> Aktion
+        StatusGruen = 0;
+      }
+      else {
+        StatusGruen = GruenePunkteSpeicher;
+      }
+    }
+    else {
+      if (GruenePunkteSpeicher == 0) {
+        int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
+        OnFwd(OUT_A, V + diff);
+        OnFwd(OUT_B, V - diff);
+      }
+      else {
+        OnFwd(OUT_AB, V);
+        StatusGruen = GruenePunkteSpeicher;
+      }
+    }
+
+    /*(if (GruenePunkteSpeicher == GRUEN_LINKS) {
       Serial.println("Links Grün");
       OnFwd(OUT_A, +180);
       OnFwd(OUT_B, -100);
-      delay(130);
-    }
-    if (gruenepunkte() == 2) { //RECHTS
+      delay(700);
+      }
+      if (GruenePunkteSpeicher == GRUEN_RECHTS) {
       Serial.println("Rechts Grün");
       OnFwd(OUT_A, -100);
       OnFwd(OUT_B, +180);
-      delay(130);
-    }
-    if (gruenepunkte() == 3) { //Geradeaus
+      delay(700);
+      }
+      if (GruenePunkteSpeicher == GRUEN_BEIDE) {
       Serial.println("Beide Grün");
-      OnFwd(OUT_A, +40);
-      OnFwd(OUT_B, +40);
-      delay(130);
-    }
-    else {
+      OnFwd(OUT_A, V);
+      OnFwd(OUT_B, V);
+      delay(700);
+      }
+      else {
       // Linienfolger
       int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
       OnFwd(OUT_A, V + diff);
       OnFwd(OUT_B, V - diff);
-
-    }
+      }*/
   }
 }
