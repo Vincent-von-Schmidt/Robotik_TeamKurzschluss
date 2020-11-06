@@ -65,12 +65,14 @@ int gruenepunkte() {
   else {
     RGruen = 0;
   }
+
+  if ((LGruen >= 3) && ((RGruen >= 3)))
+     return GRUEN_BEIDE;
+  
   if (LGruen >= 3) {
-    LGruen = 0;
     return GRUEN_LINKS;
   }
   if (RGruen >= 3) {
-    RGruen = 0;
     return GRUEN_RECHTS;
   }
   return 0;

@@ -108,7 +108,7 @@ void loop() {
   }
 
 
-  //zeigeLichtSeriell();
+ // zeigeLichtSeriell();
   //delay(30);
 
 
@@ -148,6 +148,7 @@ void loop() {
 
     messeLicht();
     LichtUmrechnen();
+/*    
     if (testeWeiss_Lueke) {
       // Off(OUT_AB);
       Serial.println("Luecke");
@@ -157,6 +158,7 @@ void loop() {
       Serial.println("keine Luecke");
       return;
     }
+*/    
     //delay(1000);
   }
 
@@ -226,10 +228,17 @@ void loop() {
   else {
     // Kreuzung
     int GruenePunkteSpeicher = gruenepunkte(); // Fuktion muss fortlaufend den Status zurückgeben
+    if (GruenePunkteSpeicher) {
+       Serial.print(">"); Serial.println(GruenePunkteSpeicher);
+    }
 
     if (StatusGruen != 0) {
       if (GruenePunkteSpeicher == 0) {
         // schwarz oder weiss auf der richtigen Seite pruefen -> Aktion
+        Off(OUT_AB);
+        zeigeLichtSeriell();
+        Serial.println(StatusGruen);
+        delay(5000);
         StatusGruen = 0;
       }
       else {
@@ -237,10 +246,11 @@ void loop() {
       }
     }
     else {
-      if (GruenePunkteSpeicher == 0) {
-        int diff = (13 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
+      if (GruenePunkteSpeicher == 0) {                                 
+        int diff = (10 * (WerteW2[RECHTS] - WerteW2[LINKS])) / 2;
         OnFwd(OUT_A, V + diff);
         OnFwd(OUT_B, V - diff);
+       // Serial.println  ("Julian ist ein 'Stern' in Latein.");
       }
       else {
         OnFwd(OUT_AB, V);
